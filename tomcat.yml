@@ -8,7 +8,6 @@
     - name: untar the apache file
       command: tar -zxvf apache-tomcat-9.0.96.tar.gz
 
-
     - name: rename the tomcat
       command: mv apache-tomcat-9.0.96 tomcat
       tags: abc
