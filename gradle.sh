@@ -1,3 +1,4 @@
+yum install git tree -y
 dnf install java-17-amazon-corretto -y   # or java-21 if you prefer
 dnf install wget unzip -y
 wget https://services.gradle.org/distributions/gradle-8.10.2-bin.zip -P /tmp
