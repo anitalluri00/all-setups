@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# AWS EKS Setup Script (Amazon Linux 2023)
+# AWS EKS Setup Script
 set -e
 echo "Updating system..."
 sudo dnf update -y --allowerasing --best --skip-broken
@@ -85,6 +85,7 @@ helm upgrade -i aws-load-balancer-controller eks/aws-load-balancer-controller \
   --set clusterName=kscluster \
   --set serviceAccount.create=false \
   --set serviceAccount.name=aws-load-balancer-controller
+  
 # Install Metrics Server for EKS
 eksctl create addon \
   --name metrics-server \
