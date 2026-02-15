@@ -6,6 +6,9 @@ echo "Updating system..."
 sudo dnf update -y
 echo "Installing dependencies..."
 sudo dnf install -y unzip curl tar git
+sudo dnf clean all
+sudo rm -rf /var/cache/dnf
+sudo dnf update -y --allowerasing
 
 # Step-2:Install AWS CLI
 if ! command -v aws &> /dev/null
