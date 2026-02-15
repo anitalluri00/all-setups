@@ -62,7 +62,7 @@ eksctl create nodegroup \
   --nodes-max=3 \
   --node-volume-size=20 \
   --ssh-access \
-  --ssh-public-key=ksaws \
+  --ssh-public-key=All \
   --managed \
   --asg-access \
   --external-dns-access \
