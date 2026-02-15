@@ -24,7 +24,7 @@ chmod +x kubectl
 sudo mv -f kubectl /usr/local/bin/
 kubectl version --client
 
-# Install eksctl (latest)
+# Install eksctl
 echo "Installing eksctl..."
 curl --silent --location \
 "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_Linux_amd64.tar.gz" \
