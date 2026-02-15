@@ -71,6 +71,5 @@ eksctl create nodegroup \
   --appmesh-access
 
 # Install Metrics Server for EKS
-kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
 eksctl create addon --name metrics-server --cluster kscluster --region us-east-1
 echo "EKS Setup Completed!"
