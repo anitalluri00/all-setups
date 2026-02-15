@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# AWS EKS Setup Script
+# AWS EKS Setup Script (Amazon Linux 2023)
 set -e
 echo "Updating system..."
 sudo dnf update -y --allowerasing --best --skip-broken
@@ -24,7 +24,7 @@ chmod +x kubectl
 sudo mv -f kubectl /usr/local/bin/
 kubectl version --client
 
-# Install eksctl
+# Install eksctl (latest)
 echo "Installing eksctl..."
 curl --silent --location \
 "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_Linux_amd64.tar.gz" \
@@ -45,6 +45,12 @@ eksctl utils associate-iam-oidc-provider \
   --region us-east-1 \
   --approve
 
+# Install Amazon EKS Pod Identity Agent Add-on
+eksctl create addon \
+  --name eks-pod-identity-agent \
+  --cluster kscluster \
+  --region us-east-1
+
 # Create Nodegroup
 eksctl create nodegroup \
   --cluster=kscluster \
@@ -56,11 +62,32 @@ eksctl create nodegroup \
   --nodes-max=3 \
   --node-volume-size=20 \
   --ssh-access \
-  --ssh-public-key=All \
+  --ssh-public-key=ksaws \
   --managed \
   --asg-access \
   --external-dns-access \
   --full-ecr-access \
   --alb-ingress-access \
   --appmesh-access
+
+# Install AWS Load Balancer Controller
+eksctl create iamserviceaccount \
+  --cluster kscluster \
+  --namespace kube-system \
+  --name aws-load-balancer-controller \
+  --attach-policy-arn arn:aws:iam::aws:policy/AWSLoadBalancerControllerIAMPolicy \
+  --approve \
+  --region us-east-1
+helm repo add eks https://aws.github.io/eks-charts
+helm repo update
+helm upgrade -i aws-load-balancer-controller eks/aws-load-balancer-controller \
+  -n kube-system \
+  --set clusterName=kscluster \
+  --set serviceAccount.create=false \
+  --set serviceAccount.name=aws-load-balancer-controller
+# Install Metrics Server for EKS
+eksctl create addon \
+  --name metrics-server \
+  --cluster kscluster \
+  --region us-east-1
 echo "EKS Setup Completed!"
