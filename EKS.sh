@@ -70,22 +70,6 @@ eksctl create nodegroup \
   --alb-ingress-access \
   --appmesh-access
 
-# Install AWS Load Balancer Controller
-eksctl create iamserviceaccount \
-  --cluster kscluster \
-  --namespace kube-system \
-  --name aws-load-balancer-controller \
-  --attach-policy-arn arn:aws:iam::aws:policy/AWSLoadBalancerControllerIAMPolicy \
-  --approve \
-  --region us-east-1
-helm repo add eks https://aws.github.io/eks-charts
-helm repo update
-helm upgrade -i aws-load-balancer-controller eks/aws-load-balancer-controller \
-  -n kube-system \
-  --set clusterName=kscluster \
-  --set serviceAccount.create=false \
-  --set serviceAccount.name=aws-load-balancer-controller
-  
 # Install Metrics Server for EKS
 eksctl create addon \
   --name metrics-server \
