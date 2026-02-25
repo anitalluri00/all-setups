@@ -13,3 +13,6 @@ sudo apt install nodejs -y
 # Install Composer
 curl -sS https://getcomposer.org/installer | php
 sudo mv composer.phar /usr/local/bin/composer
+composer install
+npm install
+npm run build
