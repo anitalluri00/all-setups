@@ -1,16 +1,22 @@
 #!/bin/bash
 
-# 1. Stop on error and print commands
+# 1. Stop on error
 set -e
 
-echo "------------------------------------------"
-echo "🚀 Starting System Update..."
-echo "------------------------------------------"
-sudo apt update -y && sudo apt upgrade -y
+# Disable the "outdated hypervisor" and service restart popups
+export DEBIAN_FRONTEND=noninteractive
+
+sudo apt update -y
+sudo apt install -y software-properties-common ca-certificates lsb-release apt-transport-https
+
+# ADDING PHP REPOSITORY (The missing step)
+echo "🐘 Adding PHP Repository..."
+sudo add-apt-repository ppa:ondrej/php -y
+sudo apt update -y
 
 # 2. Essential Utilities
 echo "📦 Installing Essential Utilities..."
-sudo apt install -y git tree unzip curl software-properties-common
+sudo apt install -y git tree unzip curl
 
 # 3. Web Server & Database
 echo "🌐 Installing Nginx..."
@@ -39,7 +45,6 @@ fi
 
 # 6. Application Build & SSL
 echo "🏗️  Building Application..."
-# Check if in a project directory
 if [ -f "composer.json" ]; then
     composer install --no-dev --optimize-autoloader
 fi
@@ -51,7 +56,3 @@ fi
 
 echo "🔒 Installing SSL (Certbot)..."
 sudo apt install -y certbot python3-certbot-nginx
-
-echo "------------------------------------------"
-echo "✅ Setup Complete!"
-echo "------------------------------------------"
