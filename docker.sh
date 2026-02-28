@@ -11,6 +11,7 @@ sudo systemctl start docker
 echo "Enabling Docker service..."
 sudo systemctl enable docker
 echo "Adding ec2-user to docker group..."
+chmod 777 /var/run/docker.sock
 sudo usermod -aG docker ec2-user
 sudo systemctl daemon-reload
 sudo systemctl restart docker
