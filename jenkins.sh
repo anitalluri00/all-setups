@@ -8,7 +8,8 @@ sudo dnf install git maven tree -y
 
 # Install Java 17 (Required for Jenkins & Maven)
 sudo dnf install -y java-17-amazon-corretto-devel
-java -version
+sudo dnf install java-21-amazon-corretto -y
+sudo alternatives --config java
 
 # Install Jenkins
 sudo wget -O /etc/yum.repos.d/jenkins.repo \
