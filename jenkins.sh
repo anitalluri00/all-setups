@@ -6,7 +6,7 @@ sudo dnf update -y
 # Install Git
 sudo dnf install git maven tree -y
 
-# Install Java 17 (Required for Jenkins & Maven)
+# Install Java 17 & java 21 (Which are Required for Jenkins & Maven)
 sudo dnf install -y java-17-amazon-corretto-devel
 sudo dnf install java-21-amazon-corretto -y
 sudo alternatives --config java
