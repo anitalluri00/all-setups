@@ -76,3 +76,13 @@ eksctl create addon \
   --cluster kscluster \
   --region us-east-1
 echo "EKS Setup Completed!"
+
+#----------------------------------------
+# Deleting commands for eks
+#----------------------------------------
+#eksctl delete cluster --name kscluster --region us-east-1
+#rm -rf ~/.kube/config
+#sudo rm -f /usr/local/bin/eksctl
+#sudo rm -f /usr/local/bin/kubectl
+#sudo rm -rf /usr/local/aws-cli
+#sudo rm -f /usr/local/bin/aws
