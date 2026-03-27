@@ -1,9 +1,11 @@
 #!/bin/bash
 
-# AWS EKS Setup Script
+# AWS EKS Setup Script (UPDATED)
 set -e
+
 echo "Updating system..."
 sudo dnf update -y --allowerasing --best --skip-broken
+
 echo "Installing dependencies..."
 sudo dnf install -y unzip curl tar git --allowerasing --best --skip-broken
 
@@ -15,13 +17,15 @@ then
   unzip -oq awscliv2.zip
   sudo ./aws/install
 fi
+
 echo ">>> Run 'aws configure' manually if not configured"
 
-# Install kubectl v1.32.0
+# Install kubectl (latest stable)
 echo "Installing kubectl..."
-curl -LO "https://dl.k8s.io/release/v1.32.0/bin/linux/amd64/kubectl"
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 chmod +x kubectl
 sudo mv -f kubectl /usr/local/bin/
+
 kubectl version --client
 
 # Install eksctl
@@ -29,7 +33,9 @@ echo "Installing eksctl..."
 curl --silent --location \
 "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_Linux_amd64.tar.gz" \
 | tar xz -C /tmp
+
 sudo mv -f /tmp/eksctl /usr/local/bin
+
 eksctl version
 
 # Create EKS Cluster
@@ -51,15 +57,13 @@ eksctl create addon \
   --cluster kscluster \
   --region us-east-1
 
-# Create Nodegroup
+# Create Nodegroup (UPDATED NAME + SCALING)
 eksctl create nodegroup \
   --cluster=kscluster \
   --region=us-east-1 \
-  --name=kseks-node-group \
+  --name=aws-eks-cluster \
   --node-type=t3.medium \
-  --nodes=2 \
-  --nodes-min=2 \
-  --nodes-max=3 \
+  --nodes=3 \
   --node-volume-size=20 \
   --ssh-access \
   --ssh-public-key=All \
@@ -75,6 +79,7 @@ eksctl create addon \
   --name metrics-server \
   --cluster kscluster \
   --region us-east-1
+
 echo "EKS Setup Completed!"
 
 #----------------------------------------
